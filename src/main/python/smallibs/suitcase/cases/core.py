@@ -23,7 +23,7 @@ class Case:
     def freeVariables():
         return []
 
-class IntCase(Case):
+class __IntCase(Case):
     def __init__(self,value):
         Case.__init__(self)
         self.value = value
@@ -31,6 +31,5 @@ class IntCase(Case):
     def unapply(self,value):
         return MatchResult(value) if self.value == value else None
 
-def Int(value):
-    return IntCase(value)
+Int = lambda value: __IntCase(value)
 
