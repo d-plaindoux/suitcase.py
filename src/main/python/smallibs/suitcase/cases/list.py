@@ -8,7 +8,6 @@ from smallibs.utils.monads import Maybe
 # ----------------------------------------
 
 class __EmptyCase(Case):
-
     def __init__(self):
         Case.__init__(self)
 
