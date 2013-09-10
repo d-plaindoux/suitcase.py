@@ -9,11 +9,10 @@ class Case:
     def fromObject(o):
         if type(o) == int:
             return Int(o)
+        elif isinstance(o,Case):
+            return o
         else:
-            if isinstance(o,Case):
-                return o
-            else:
-                raise NotImplementedError()
+            raise NotImplementedError()
     
     def __init__(self):
         pass

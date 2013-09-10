@@ -20,9 +20,9 @@ class ConsCase(Case):
         self.tail = Case.fromObject(tail)
 
     def unapply(self,value):
-        iterator = iter(value)
-        return Maybe.bind(self.head.unapply(iterator.next()), lambda r:
-               Maybe.bind(self.tail.unapply(list(iterator)), lambda r: MatchResult(value)))
+        return Maybe.bind(Maybe.bind(type(value) == list,lambda _:iter(value)), lambda iterator:
+                          Maybe.bind(self.head.unapply(iterator.next()), lambda rhead:
+                          Maybe.bind(self.tail.unapply(list(iterator)), lambda rtail: MatchResult(value))))
 
 def Cons(head,tail):
     return ConsCase(head,tail)
