@@ -1,0 +1,15 @@
+venv
+.metadata
+.project
+.settings
+.classpath
+.buildpath
+.gradle
+*~
+*.iws
+*.iml
+*.ipr
+.idea
+*.pyc
+
+

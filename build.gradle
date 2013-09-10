@@ -1,0 +1,13 @@
+// ----------------------------------------------------------------------
+// Gradle initial build file 
+// ----------------------------------------------------------------------
+
+task run(type:Exec) {
+   environment.put "PYTHONPATH", 'src/main/python'
+   commandLine 'python', 'src/main/python/main.py'
+} 
+
+task test(type:Exec) {
+   environment.put "PYTHONPATH", 'src/main/python:src/test/python'
+   commandLine 'python', 'src/test/python/tests.py'
+} 
