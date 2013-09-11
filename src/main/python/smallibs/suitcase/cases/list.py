@@ -1,7 +1,7 @@
 """ List Cases """
 
 from core import Case, MatchResult
-from smallibs.utils.monads import Maybe
+from smallibs.utils.monads.maybe import *
 
 # ----------------------------------------
 # Internal classes
@@ -21,10 +21,14 @@ class __ConsCase(Case):
         self.tail = Case.fromObject(tail)
 
     def unapply(self,value):
-        mayBeIterator = Maybe.bind(type(value) == list,lambda _:iter(value))
-        return Maybe.bind(mayBeIterator, lambda iterator:
-                          Maybe.bind(self.head.unapply(iterator.next()), lambda rhead:
-                          Maybe.bind(self.tail.unapply(list(iterator)), lambda rtail: MatchResult(value))))
+        mayBeIterator = bind(type(value) == list,lambda _:iter(value))
+        return bind(mayBeIterator, lambda iterator:
+                          bind(self.head.unapply(iterator.next()), lambda rhead:
+                          bind(self.tail.unapply(list(iterator)), lambda rtail:
+                          MatchResult(value) << rhead << rtail)))
+
+    def freeVariables():
+        return 
 
 # ----------------------------------------
 # Public factories
