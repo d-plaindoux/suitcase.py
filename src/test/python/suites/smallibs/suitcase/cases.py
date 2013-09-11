@@ -12,22 +12,34 @@ class TestCase(unittest.TestCase):
         pass
 
     def test_type_should_match(self):
-        assert bind(Case.fromObject(int).unapply(1),lambda _:True)
+        assert bind(Case.of(int).unapply(1),lambda _:True)
 
     def test_type_should_not_match(self):
-        assert bind(Case.fromObject(str).unapply(1),lambda _:True) == None
+        assert bind(Case.of(str).unapply(1),lambda _:True) == None
 
     def test_int_should_match(self):
-        assert bind(Case.fromObject(1).unapply(1),lambda _:True)
+        assert bind(Case.of(1).unapply(1),lambda _:True)
 
     def test_int_should_not_match(self):
-        assert bind(Case.fromObject(0).unapply(1),lambda _:True) == None
+        assert bind(Case.of(0).unapply(1),lambda _:True) == None
+
+    def test_float_should_match(self):
+        assert bind(Case.of(1.2).unapply(1.2),lambda _:True)
+
+    def test_float_should_not_match(self):
+        assert bind(Case.of(0.2).unapply(1.2),lambda _:True) == None
+
+    def test_bool_should_match(self):
+        assert bind(Case.of(True).unapply(True),lambda _:True)
+
+    def test_bool_should_not_match(self):
+        assert bind(Case.of(True).unapply(False),lambda _:True) == None
 
     def test_string_should_match(self):
-        assert bind(Case.fromObject('Hello').unapply('Hello'),lambda _:True)
+        assert bind(Case.of('Hello').unapply('Hello'),lambda _:True)
 
     def test_string_should_not_match(self):
-        assert bind(Case.fromObject('Hello').unapply('World'),lambda _:True) == None
+        assert bind(Case.of('Hello').unapply('World'),lambda _:True) == None
 
     def test_empty_case_should_match_empty_list(self):
         assert bind(Empty.unapply([]),lambda _:True)

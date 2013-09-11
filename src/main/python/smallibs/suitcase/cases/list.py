@@ -17,15 +17,15 @@ class __EmptyCase(Case):
 class __ConsCase(Case):
     def __init__(self,head,tail):
         Case.__init__(self)
-        self.head = Case.fromObject(head)
-        self.tail = Case.fromObject(tail)
+        self.head = Case.of(head)
+        self.tail = Case.of(tail)
 
     def unapply(self,value):
         mayBeIterator = bind(type(value) == list,lambda _:iter(value))
         return bind(mayBeIterator, lambda iterator:
-                          bind(self.head.unapply(iterator.next()), lambda rhead:
-                          bind(self.tail.unapply(list(iterator)), lambda rtail:
-                          MatchResult(value) << rhead << rtail)))
+                    bind(self.head.unapply(iterator.next()), lambda rhead:
+                         bind(self.tail.unapply(list(iterator)), lambda rtail:
+                              MatchResult(value) << rhead << rtail)))
 
     def freeVariables():
         return 

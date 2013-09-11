@@ -6,4 +6,3 @@ def unit(v):
 def bind(v,f):
     return f(v) if (v) else None
 
-
