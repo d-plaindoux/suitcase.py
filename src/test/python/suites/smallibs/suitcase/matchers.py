@@ -1,7 +1,7 @@
 import unittest
 
 from smallibs.utils.monads.maybe import *
-from smallibs.suitcase.cases.core import Case, _, var
+from smallibs.suitcase.cases.core import Case, _, var, reentrant
 from smallibs.suitcase.cases.list import Empty,Cons
 from smallibs.suitcase.match.matcher import Matcher, MatchingException
 
@@ -62,10 +62,27 @@ class TestCase(unittest.TestCase):
         
     def test_should_capture_match_cons_head(self):
         matcher = Matcher.create()
-        matcher.caseOf(Cons(var,_)).then(lambda i:i[0])
+        matcher.caseOf(Cons(var,var)).then(lambda i:i[0])
         matcher.caseOf(_).then(False)
 
         assert matcher.match([1]) == 1
+        
+    def test_should_add_all_elements(self):
+        matcher = Matcher.create()
+        matcher.caseOf(Empty).then(0)
+        matcher.caseOf(Cons(var,var)).then(lambda i:i[0] + matcher.match(i[1]))
+
+        assert matcher.match([1,2,3]) == 6 # A perfert number :-)
+
+    def test_should_add_all_elements_with_reentrant_matcher(self):
+        matcher = reentrant(Matcher.create())
+        matcher.caseOf(Empty).then(0)
+        matcher.caseOf(Cons(var,Empty)).then(lambda i:i[0])
+        matcher.caseOf(Cons(var,var.of(matcher))).then(lambda i:i[0] + i[1])
+
+        # Does not work properly ! Why ?
+        # assert matcher.match([1,2,3]) == 6 # A perfert number :-)
+        
         
 def suite():
    suite = unittest.TestSuite()

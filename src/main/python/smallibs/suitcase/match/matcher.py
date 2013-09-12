@@ -19,19 +19,19 @@ class Matcher:
             self.matcher = matcher
             self.pattern = Case.of(pattern)
 
-        def then(self, value):
-            if isinstance(value, FunctionType):
-                return self.matcher.addRule(self.pattern,value)
+        def then(self, callback):
+            if isinstance(callback, FunctionType):
+                return self.matcher.addRule(self.pattern,callback)
             else:
-                return self.matcher.addRule(self.pattern,lambda _: value)
+                return self.matcher.addRule(self.pattern,lambda _: callback)
 
     #------------------------------
 
     def __init__(self):
         self.rules = []
 
-    def addRule(self,pattern,value):
-        self.rules.extend([(pattern,value)])
+    def addRule(self,pattern,callback):
+        self.rules.extend([(pattern,callback)])
         return self
 
     def caseOf(self, pattern):

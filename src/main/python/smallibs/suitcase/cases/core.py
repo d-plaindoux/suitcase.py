@@ -74,10 +74,10 @@ class __AnyCase(Case):
 class __VarCase(Case):
     def __init__(self,value=None):
         Case.__init__(self)
-        self.value = value if value else _
+        self.value = Case.of(value) if value else _
 
     def of(self,value):
-        return __VarCase(value)
+        return varWith(value)
 
     def unapply(self,value):
         return bind(self.value.unapply(value),lambda _:MatchResult(value,[value]))
@@ -121,13 +121,35 @@ class __TypeCase(AtomCase):
         return isinstance(value,self.value)
 
 # ----------------------------------------
+
+class __ReentrantCase(Case):
+    def __init__(self,matcher):
+        Case.__init__(self)
+        self.matcher = matcher
+
+    def unapply(self,value):
+        try:
+            return MatchResult(self.match(value),[])
+        except:
+            print "Exception has been raise so return None ",value
+            return None
+
+    def caseOf(self, pattern):
+        return self.matcher.caseOf(pattern)
+
+    def match(self,term):
+        return self.matcher.match(term)
+        
+# ----------------------------------------
 # Public factories
 # ----------------------------------------
 
-Int    = lambda value: __IntCase(value)
-Float  = lambda value: __FloatCase(value)
-String = lambda value: __StringCase(value)
-Bool   = lambda value: __BoolCase(value)
-Type   = lambda value: __TypeCase(value)
-_      = __AnyCase()
-var    = __VarCase()
+Int       = lambda value: __IntCase(value)
+Float     = lambda value: __FloatCase(value)
+String    = lambda value: __StringCase(value)
+Bool      = lambda value: __BoolCase(value)
+Type      = lambda value: __TypeCase(value)
+_         = __AnyCase()
+var       = __VarCase()
+varWith   = lambda value: __VarCase(value)
+reentrant = lambda value: __ReentrantCase(value)
