@@ -7,13 +7,16 @@ from smallibs.utils.monads.maybe import *
 # ----------------------------------------
 
 class MatchResult:
-    def __init__(self,value,variables=[]):
+    def __init__(self,value,variables):
         self.value = value
         self.variables = variables
 
     def __lshift__(self,value):
-        self.variables = [self.variables,value.variables]
+        self.variables.extend(value.getVariables())
         return self
+
+    def getVariables(self):
+        return self.variables
 
 class Case:
     @staticmethod
@@ -55,7 +58,7 @@ class AtomCase(Case):
         return self.value == value
 
     def unapply(self,value):
-        return bind(self.compareWith(value), lambda _:MatchResult(value))
+        return bind(self.compareWith(value), lambda _:MatchResult(value,[]))
 
 # ----------------------------------------
 
@@ -64,14 +67,17 @@ class __AnyCase(Case):
         Case.__init__(self)
 
     def unapply(self,value):
-        return MatchResult(value)
+        return MatchResult(value,[])
 
 # ----------------------------------------
 
 class __VarCase(Case):
-    def __init__(self,value):
+    def __init__(self,value=None):
         Case.__init__(self)
-        self.value = Case.of(value)
+        self.value = value if value else _
+
+    def of(self,value):
+        return __VarCase(value)
 
     def unapply(self,value):
         return bind(self.value.unapply(value),lambda _:MatchResult(value,[value]))
@@ -124,4 +130,4 @@ String = lambda value: __StringCase(value)
 Bool   = lambda value: __BoolCase(value)
 Type   = lambda value: __TypeCase(value)
 _      = __AnyCase()
-var    = lambda value: __VarCase(value)
+var    = __VarCase()

@@ -1,5 +1,6 @@
 """ Matcher class """
 
+from types import FunctionType
 from smallibs.suitcase.cases.core import Case
 
 class MatchingException(Exception):
@@ -19,7 +20,10 @@ class Matcher:
             self.pattern = Case.of(pattern)
 
         def then(self, value):
-            return self.matcher.addRule(self.pattern,value)            
+            if isinstance(value, FunctionType):
+                return self.matcher.addRule(self.pattern,value)
+            else:
+                return self.matcher.addRule(self.pattern,lambda _: value)
 
     #------------------------------
 
@@ -37,6 +41,6 @@ class Matcher:
         for rule in self.rules:
             result = rule[0].unapply(term)
             if result:
-                return rule[1](result.variables)
+                return rule[1](result.getVariables())
 
         raise MatchingException()
