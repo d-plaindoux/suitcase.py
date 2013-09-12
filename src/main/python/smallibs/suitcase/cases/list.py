@@ -21,12 +21,14 @@ class __ConsCase(Case):
         self.tail = Case.of(tail)
 
     def unapply(self,value):
-        mayBeIterator = bind(type(value) == list and len(value) > 0,lambda _:iter(value))
-        return bind(mayBeIterator, lambda iterator:
-               bind(self.head.unapply(iterator.next()), lambda rhead:
-               bind(self.tail.unapply(list(iterator)), lambda rtail:
-                    MatchResult(value,[]) << rhead << rtail)))
-
+        if type(value) == list and len(value) > 0:
+            iterator = iter(value)
+            return bind(self.head.unapply(iterator.next()), lambda rhead:
+                        bind(self.tail.unapply(list(iterator)), lambda rtail:
+                             MatchResult(value,[]) << rhead << rtail))
+        else:
+            return None
+        
     def freeVariables():
         variables = []
         variables.extend(self.head.freeVariables())

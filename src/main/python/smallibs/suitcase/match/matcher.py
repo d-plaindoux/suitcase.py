@@ -41,6 +41,7 @@ class Matcher:
         for rule in self.rules:
             result = rule[0].unapply(term)
             if result:
-                return rule[1](result.getVariables())
+                variables = result.getVariables()
+                return rule[1](variables)
 
         raise MatchingException()

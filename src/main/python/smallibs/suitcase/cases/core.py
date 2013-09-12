@@ -7,13 +7,16 @@ from smallibs.utils.monads.maybe import *
 # ----------------------------------------
 
 class MatchResult:
-    def __init__(self,value,variables):
+    def __init__(self,value,result):
         self.value = value
-        self.variables = variables
+        self.variables = result
 
     def __lshift__(self,value):
         self.variables.extend(value.getVariables())
         return self
+
+    def __str__(self):
+        return "MatchResult(%s,%s)" % (self.value,self.variables)
 
     def getVariables(self):
         return self.variables
@@ -49,16 +52,16 @@ class Case:
 # Internal classes
 # ----------------------------------------
 
-class AtomCase(Case):
+class __TraceCase(Case):        
     def __init__(self,value):
         Case.__init__(self)
         self.value = value
 
-    def compareWith(self,value):
-        return self.value == value
-
     def unapply(self,value):
-        return bind(self.compareWith(value), lambda _:MatchResult(value,[]))
+        print "# %s.unapply(%s) = ???" % (self.value,value)
+        result = self.value.unapply(value)
+        print "# %s.unapply(%s) = %s" % (self.value,value,result)
+        return result
 
 # ----------------------------------------
 
@@ -80,7 +83,23 @@ class __VarCase(Case):
         return varWith(value)
 
     def unapply(self,value):
-        return bind(self.value.unapply(value),lambda _:MatchResult(value,[value]))
+        return bind(self.value.unapply(value),lambda res:MatchResult(value,[res.value]) << res)
+
+# ----------------------------------------
+
+class AtomCase(Case):
+    def __init__(self,value):
+        Case.__init__(self)
+        self.value = value
+
+    def compareWith(self,value):
+        return self.value == value
+
+    def unapply(self,value):
+        if self.compareWith(value):
+            return MatchResult(value,[])
+        else:
+            return None
 
 # ----------------------------------------
 
@@ -131,7 +150,6 @@ class __ReentrantCase(Case):
         try:
             return MatchResult(self.match(value),[])
         except:
-            print "Exception has been raise so return None ",value
             return None
 
     def caseOf(self, pattern):
@@ -153,3 +171,4 @@ _         = __AnyCase()
 var       = __VarCase()
 varWith   = lambda value: __VarCase(value)
 reentrant = lambda value: __ReentrantCase(value)
+trace     = lambda value: __TraceCase(value)
