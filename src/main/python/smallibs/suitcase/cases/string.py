@@ -1,5 +1,7 @@
 """ List Cases """
 
+import re
+
 from core import Case, MatchResult
 from smallibs.utils.monads.maybe import *
 
@@ -7,13 +9,13 @@ from smallibs.utils.monads.maybe import *
 # Internal classes
 # ----------------------------------------
 
-class _RegexCase(Case):
+class __RegexCase(Case):
     def __init__(self,value):
         Case.__init__(self)
-        self.value = "^" + value
+        self.value = "^" + value + "$"
 
     def unapply(self,value):
-        return 
+        return bind(re.match(self.value,value),lambda res:MatchResult(res.groups(),[]))
 
 # ----------------------------------------
 # Public factories

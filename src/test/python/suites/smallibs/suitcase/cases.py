@@ -63,6 +63,15 @@ class TestCase(unittest.TestCase):
     def test_cons_case_should_not_match_not_empty_list(self):
         assert bind(Cons(1,Empty).unapply([2]),lambda _:True) == None
         
+    def test_regexp_should_match_string(self):
+        assert bind(Regex("a*b*").unapply("aaabbb"),lambda _:True)
+
+    def test_regexp_should_not_match_string(self):
+        assert bind(Regex("a*b*").unapply("aaabbbcccc"),lambda _:True) == None
+        
+    def test_regexp_should_not_match_again_string(self):
+        assert bind(Regex("a*b*").unapply("ccccaaabbb"),lambda _:True) == None
+        
 def suite():
    suite = unittest.TestSuite()
    suite.addTest(unittest.makeSuite(TestCase))

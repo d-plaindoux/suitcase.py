@@ -3,6 +3,7 @@ import unittest
 from smallibs.utils.monads.maybe import *
 from smallibs.suitcase.cases.core import Case, _, var, reentrant
 from smallibs.suitcase.cases.list import Empty,Cons
+from smallibs.suitcase.cases.string import Regex
 from smallibs.suitcase.match.matcher import Matcher, MatchingException
 
 class TestCase(unittest.TestCase):
@@ -81,7 +82,12 @@ class TestCase(unittest.TestCase):
 
         assert matcher.match([1,2,3]) == 6 # A perfect number :-)
         
-        
+    def test_should_match_string_using_regex(self):
+        matcher = Matcher.create()
+        matcher.caseOf(var.of(Regex('(\w+)\s+(\w+)!'))).then(lambda r:r[0])
+
+        assert matcher.match('Hello World!') == ('Hello','World') # A perfect number :-)
+                
 def suite():
    suite = unittest.TestSuite()
    suite.addTest(unittest.makeSuite(TestCase))
