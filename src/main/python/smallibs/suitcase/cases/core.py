@@ -33,9 +33,9 @@ class Case:
         }
 
         if type(o) in basicConverter:
-            return basicConverter[type(o)](o)
+            return (basicConverter[type(o)](o))
         elif isinstance(o,Case):
-            return o
+            return (o)
         else:
             raise NotImplementedError()
     
@@ -75,9 +75,9 @@ class __AnyCase(Case):
 # ----------------------------------------
 
 class __VarCase(Case):
-    def __init__(self,value=None):
-        Case.__init__(self)
-        self.value = Case.of(value) if value else _
+    def __init__(self,value):
+        Case.__init__(self)        
+        self.value = _ if value == None else Case.of(value)
 
     def of(self,value):
         return varWith(value)
@@ -96,10 +96,7 @@ class AtomCase(Case):
         return self.value == value
 
     def unapply(self,value):
-        if self.compareWith(value):
-            return MatchResult(value,[])
-        else:
-            return None
+        return MatchResult(value,[]) if self.compareWith(value) else None
 
 # ----------------------------------------
 
@@ -167,8 +164,9 @@ Float     = lambda value: __FloatCase(value)
 String    = lambda value: __StringCase(value)
 Bool      = lambda value: __BoolCase(value)
 Type      = lambda value: __TypeCase(value)
-_         = __AnyCase()
-var       = __VarCase()
 varWith   = lambda value: __VarCase(value)
 reentrant = lambda value: __ReentrantCase(value)
 trace     = lambda value: __TraceCase(value)
+
+_         = __AnyCase()
+var       = __VarCase(None)
