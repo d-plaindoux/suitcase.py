@@ -24,6 +24,9 @@ internal state. For instance the following sample checks if an integer
 is <tt>O</tt> or not.
 
 ``` python
+from smallibs.suitcase.cases.core import _
+from smallibs.suitcase.match.matcher import Match
+
 isZero = Match.match();
 
 isZero.caseOf(0).then(True);
