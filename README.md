@@ -19,10 +19,9 @@ For  this   purpose   a simple  pattern    matching  inspired by Scala
 [extractor  object](http://www.scala-lang.org/node/112)   has     been
 designed.
 
-This pattern matching offers   a  simple mechanism for   simple object
-selection based on intrinsic equality.   Indeed pattern matching cases
-can be done on the object  kind and it's  internal state. For instance
-the following sample checks if an integer is <tt>O</tt> or not.
+Then pattern  matching cases can be done  on the object  kind and it's
+internal state. For instance the following sample checks if an integer
+is <tt>O</tt> or not.
 
 ``` python
 isZero = Match.match();
@@ -30,5 +29,5 @@ isZero = Match.match();
 isZero.caseOf(0).then(True);
 isZero.caseOf(_).then(False);
 
-isZero.match(0); // == True
+isZero.match(0); # == True
 ```
