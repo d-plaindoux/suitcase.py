@@ -1,6 +1,8 @@
 ''' Dedicated lexer based on specific recognizer '''
 
 import re
+from smallibs.monads.monad import bind
+from smallibs.monads.options import option
 
 class Stream:
     def __init__(self,value):
@@ -9,6 +11,7 @@ class Stream:
 
     def offset(self,value):
         self._offset += value
+        return self
 
     def value(self):
         return self._value
@@ -19,13 +22,9 @@ class Recognizer:
         self.regex = '^(' + regex + ')'
 
     def __call__(self,stream):
-        result = re.match(self.regex,stream.value())
-        if result:
-            stream.offset(len(result.group()))
-            groups = result.groups()
-            return self.kind(groups[len(groups)-1])
-        else:
-            None
+        return (option(re.match(self.regex,stream.value())) |bind| (
+                lambda result: option(stream.offset(len(result.group()))) |bind| (
+                lambda _: option(self.kind(result.groups()[len(result.groups())-1]))))).join()
 
 class IntRecognizer(Recognizer):
     def __init__(self):
