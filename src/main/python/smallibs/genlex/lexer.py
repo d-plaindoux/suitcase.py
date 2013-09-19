@@ -22,7 +22,8 @@ class TokenStream:
         return self.stream.isEmpty()
             
     def next(self):
-        self.__skip()
+        while self.__skip():
+            pass
         
         if self.stream.isEmpty():
            return None 
