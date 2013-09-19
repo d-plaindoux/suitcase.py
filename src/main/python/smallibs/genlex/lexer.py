@@ -1,40 +1,54 @@
 ''' Dedicated lexer based on specific recognizer '''
 
-import re
-from smallibs.monads.monad import bind
-from smallibs.monads.options import option
+from smallibs.utils.infix import Infix
 
-class Stream:
-    def __init__(self,value):
-        self._offset = 0;
-        self._value = value
+class TokenStream:
+    def __init__(self,genlex,stream):
+        self.genlex = genlex
+        self.stream = stream
 
-    def offset(self,value):
-        self._offset += value
+    def __skip(self):
+        if self.stream.isEmpty():
+           return None 
+       
+        for recognizer in self.genlex.skipped:
+            result = recognizer(self.stream).join()
+            if result != None:
+                return result
+
+        return None
+            
+    def isFinish():
+        return self.stream.isEmpty()
+            
+    def next(self):
+        self.__skip()
+        
+        if self.stream.isEmpty():
+           return None 
+
+        for recognizer in self.genlex.recognizers:
+            result = recognizer(self.stream).join()
+            if result != None:
+                return result
+
+        return None
+        
+class Genlex:
+    def __init__(self):
+        self.recognizers = []
+        self.skipped = []
+
+    def skip(self,skip):
+        self.skipped.extend([skip])
         return self
 
-    def value(self):
-        return self._value
+    def accept(self,recognizer):
+        self.recognizers.extend([recognizer])
+        return self
+    
+    def parse(self,stream):
+        return TokenStream(self,stream)
 
-class Recognizer:
-    def __init__(self, kind, regex):
-        self.kind = kind
-        self.regex = '^(' + regex + ')'
-
-    def __call__(self,stream):
-        return (option(re.match(self.regex,stream.value())) |bind| (
-                lambda result: option(stream.offset(len(result.group()))) |bind| (
-                lambda _: option(self.kind(result.groups()[len(result.groups())-1]))))).join()
-
-class IntRecognizer(Recognizer):
-    def __init__(self):
-        Recognizer.__init__(self,(lambda s:int(s)),'^\\d+')
-        
-class StringRecognizer(Recognizer):
-    def __init__(self):
-        Recognizer.__init__(self,(lambda s:s),'"([^"]*)"')
-        
-class StringDelimRecognizer(Recognizer):
-    def __init__(self):
-        Recognizer.__init__(self,(lambda s:s),"'([^']*)'")
-        
+skip = Infix(lambda g,s: g.skip(s))
+accept= Infix(lambda g,r: g.accept(r))
