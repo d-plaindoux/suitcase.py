@@ -9,9 +9,6 @@ class Something(Monad):
     def bind(self, funcall):
         return funcall(self.value)
 
-    def __str__(self):
-        return "Something(%s)" % self.value
-
 class Nothing(Monad):
     def __init__(self):
         Monad.__init__(self,None)
@@ -20,6 +17,4 @@ class Nothing(Monad):
         return self
 
 def option(value=None):
-    if isinstance(value,Nothing):
-        raise
     return Nothing() if value == None else Something(value)
