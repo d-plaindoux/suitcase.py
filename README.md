@@ -42,8 +42,8 @@ isZero.match(0); # == True
 Computation based on structural induction can be recursive.
 
 ``` python
-from smallibs.suitcase.cases import var, reentrant
-from smallibs.suitcase.cases.list import *
+from smallibs.suitcase.cases import var
+from smallibs.suitcase.cases.list import Empty,Cons
 from smallibs.suitcase.match import Match
 
 adder = Match.create()
@@ -59,8 +59,8 @@ Computation based on structural induction can also been provided using
 `reentrant` capability for example.
 
 ``` python
-from smallibs.suitcase.cases import var, reentrant
-from smallibs.suitcase.cases.list import *
+from smallibs.suitcase.cases import var,reentrant
+from smallibs.suitcase.cases.list import Empty,Cons
 from smallibs.suitcase.match import Match
 
 adder = reentrant(Match.create())
