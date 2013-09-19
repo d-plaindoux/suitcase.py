@@ -1,6 +1,6 @@
 """ Core case """
 
-from smallibs.utils.monads.options import option
+from smallibs.monads.options import option
 
 # ----------------------------------------
 # Public classes

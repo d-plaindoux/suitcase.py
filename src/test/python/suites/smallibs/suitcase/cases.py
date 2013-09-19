@@ -1,6 +1,6 @@
 import unittest
 
-from smallibs.utils.monads.options import option
+from smallibs.monads.options import option
 from smallibs.suitcase.cases.core import Case, var, _
 from smallibs.suitcase.cases.list import Empty,Cons
 from smallibs.suitcase.cases.string import Regex

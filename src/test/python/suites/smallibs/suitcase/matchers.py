@@ -1,6 +1,5 @@
 import unittest
 
-from smallibs.utils.monads.maybe import *
 from smallibs.suitcase.cases.core import Case, _, var, reentrant
 from smallibs.suitcase.cases.list import Empty,Cons
 from smallibs.suitcase.cases.string import Regex

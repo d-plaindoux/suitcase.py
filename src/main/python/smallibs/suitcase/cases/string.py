@@ -3,7 +3,7 @@
 import re
 
 from core import Case, MatchResult
-from smallibs.utils.monads.options import option
+from smallibs.monads.options import option
 
 # ----------------------------------------
 # Internal classes
