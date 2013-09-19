@@ -19,6 +19,8 @@ For  this   purpose   a simple  pattern    matching  inspired by Scala
 [extractor  object](http://www.scala-lang.org/node/112)   has     been
 designed.
 
+### Simple example
+
 Then pattern  matching cases can be done  on the object  kind and it's
 internal state. For instance the following sample checks if an integer
 is <tt>O</tt> or not.
@@ -34,3 +36,20 @@ isZero.caseOf(_).then(False);
 
 isZero.match(0); # == True
 ```
+
+### Recursive structural induction
+
+Computation based on structural induction can also been provided using
+`reentrant` capability for example.
+
+``` python
+from smallibs.suitcase.cases import var, reentrant
+from smallibs.suitcase.cases.list import *
+from smallibs.suitcase.match import Match
+
+matcher = reentrant(Match.create())
+matcher.caseOf(Empty).then(0)
+matcher.caseOf(Cons(var,var.of(matcher))).then(lambda i:i[0] + i[1])
+
+assert matcher.match([1,2,3]) == 6 # A perfect number :-)
+``` 
