@@ -48,7 +48,7 @@ from smallibs.suitcase.match import Match
 
 adder = Match.create()
 adder.caseOf(Empty).then(0)
-adder.caseOf(Cons(var,var.of(adder))).then(lambda i:i[0] + i[1])
+adder.caseOf(Cons(var,var)).then(lambda i:i[0] + adder.match(i[1]))
 
 adder.match([1,2,3]) # == 6 (A perfect number)
 ``` 
