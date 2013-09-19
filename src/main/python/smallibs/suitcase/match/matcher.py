@@ -39,7 +39,7 @@ class Matcher:
 
     def match(self,term):
         for rule in self.rules:
-            result = rule[0].unapply(term)
+            result = rule[0].unapply(term).join()
             if result:
                 variables = result.getVariables()
                 return rule[1](variables)

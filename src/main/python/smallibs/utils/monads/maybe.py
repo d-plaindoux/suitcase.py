@@ -1,8 +1,17 @@
 """ Maybe monad """
 
-def unit(v):
-    return v
+from monad import Monad
 
-def bind(v,f):
-    return None if v == None else f(v)
+class Maybe(Monad):
+    def __init__(self):
+        Monad.__init__(self)
+                
+    def bind(self, funcall):
+        return funcall(self.value)
 
+class Nothing(Monad):
+    def __init__(self):
+        Monad.init__(self,value)
+
+    def bind(self,funcall):
+        return self

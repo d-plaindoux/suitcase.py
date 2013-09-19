@@ -1,7 +1,7 @@
 """ List Cases """
 
 from core import Case, MatchResult
-from smallibs.utils.monads.maybe import *
+from smallibs.utils.monads.options import option
 
 # ----------------------------------------
 # Internal classes
@@ -12,7 +12,7 @@ class __EmptyCase(Case):
         Case.__init__(self)
 
     def unapply(self,value):
-        return MatchResult(value,[]) if set(value) == set([]) else None
+        return option(MatchResult(value,[]) if set(value) == set([]) else None)
 
 class __ConsCase(Case):
     def __init__(self,head,tail):
@@ -23,11 +23,11 @@ class __ConsCase(Case):
     def unapply(self,value):
         if type(value) == list and len(value) > 0:
             iterator = iter(value)
-            return bind(self.head.unapply(iterator.next()), lambda rhead:
-                        bind(self.tail.unapply(list(iterator)), lambda rtail:
-                             MatchResult(value,[]) << rhead << rtail))
+            return self.head.unapply(iterator.next()).bind(
+                   lambda rhead:self.tail.unapply(list(iterator)).bind(
+                   lambda rtail:option(MatchResult(value,[]) << rhead << rtail)))
         else:
-            return None
+            return option()
         
     def freeVariables():
         variables = []

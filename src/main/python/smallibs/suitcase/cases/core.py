@@ -1,15 +1,15 @@
 """ Core case """
 
-from smallibs.utils.monads.maybe import *
+from smallibs.utils.monads.options import option
 
 # ----------------------------------------
 # Public classes
 # ----------------------------------------
 
 class MatchResult:
-    def __init__(self,value,result):
+    def __init__(self,value,variables):
         self.value = value
-        self.variables = result
+        self.variables = variables
 
     def __lshift__(self,value):
         self.variables.extend(value.getVariables())
@@ -70,7 +70,7 @@ class __AnyCase(Case):
         Case.__init__(self)
 
     def unapply(self,value):
-        return MatchResult(value,[])
+        return option(MatchResult(value,[]))
 
 # ----------------------------------------
 
@@ -83,20 +83,21 @@ class __VarCase(Case):
         return varWith(value)
 
     def unapply(self,value):
-        return bind(self.value.unapply(value),lambda res:MatchResult(value,[res.value]) << res)
+        return self.value.unapply(value).bind(lambda res:option(MatchResult(value,[res.value]) << res))
 
 # ----------------------------------------
 
 class AtomCase(Case):
     def __init__(self,value):
         Case.__init__(self)
+        assert value != None
         self.value = value
 
     def compareWith(self,value):
-        return self.value == value
+        return option(True if self.value == value else None)
 
     def unapply(self,value):
-        return MatchResult(value,[]) if self.compareWith(value) else None
+        return self.compareWith(value).bind(lambda _:option(MatchResult(value,[])))
 
 # ----------------------------------------
 
@@ -134,7 +135,7 @@ class __TypeCase(AtomCase):
         assert type(value) == type
 
     def compareWith(self,value):
-        return isinstance(value,self.value)
+        return option(True if isinstance(value,self.value) else None)
 
 # ----------------------------------------
 
@@ -145,9 +146,9 @@ class __ReentrantCase(Case):
 
     def unapply(self,value):
         try:
-            return MatchResult(self.match(value),[])
+            return option(MatchResult(self.match(value),[]))
         except:
-            return None
+            return option()
 
     def caseOf(self, pattern):
         return self.matcher.caseOf(pattern)

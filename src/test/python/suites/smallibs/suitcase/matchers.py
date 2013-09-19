@@ -86,7 +86,7 @@ class TestCase(unittest.TestCase):
         matcher = Matcher.create()
         matcher.caseOf(var.of(Regex('(\w+)\s+(\w+)!'))).then(lambda r:r[0])
 
-        assert matcher.match('Hello World!') == ('Hello','World') # A perfect number :-)
+        assert matcher.match('Hello World!') == ('Hello','World')
                 
 def suite():
    suite = unittest.TestSuite()

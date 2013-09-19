@@ -3,7 +3,7 @@
 import re
 
 from core import Case, MatchResult
-from smallibs.utils.monads.maybe import *
+from smallibs.utils.monads.options import option
 
 # ----------------------------------------
 # Internal classes
@@ -15,7 +15,7 @@ class __RegexCase(Case):
         self.value = "^" + value + "$"
 
     def unapply(self,value):
-        return bind(re.match(self.value,value),lambda res:MatchResult(res.groups(),[]))
+        return option(re.match(self.value,value)).bind(lambda res:option(MatchResult(res.groups(),[])))
 
 # ----------------------------------------
 # Public factories
