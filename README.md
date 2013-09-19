@@ -39,6 +39,22 @@ isZero.match(0); # == True
 
 ### Recursive structural induction
 
+Computation based on structural induction can be recursive.
+
+``` python
+from smallibs.suitcase.cases import var, reentrant
+from smallibs.suitcase.cases.list import *
+from smallibs.suitcase.match import Match
+
+adder = Match.create()
+adder.caseOf(Empty).then(0)
+adder.caseOf(Cons(var,var.of(adder))).then(lambda i:i[0] + i[1])
+
+adder.match([1,2,3]) # == 6 (A perfect number)
+``` 
+
+#### Rentrant recursive structural induction
+
 Computation based on structural induction can also been provided using
 `reentrant` capability for example.
 
@@ -50,9 +66,7 @@ from smallibs.suitcase.match import Match
 adder = reentrant(Match.create())
 adder.caseOf(Empty).then(0)
 adder.caseOf(Cons(var,var.of(adder))).then(lambda i:i[0] + i[1])
-# Or 
-adder.caseOf(Cons(var,var)).then(lambda i:i[0] + adder.match(i[1]))
-
 
 adder.match([1,2,3]) # == 6 (A perfect number)
 ``` 
+
