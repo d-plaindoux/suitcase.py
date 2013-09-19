@@ -51,5 +51,5 @@ matcher = reentrant(Match.create())
 matcher.caseOf(Empty).then(0)
 matcher.caseOf(Cons(var,var.of(matcher))).then(lambda i:i[0] + i[1])
 
-assert matcher.match([1,2,3]) == 6 # A perfect number :-)
+matcher.match([1,2,3]) # == 6 (A perfect number)
 ``` 
