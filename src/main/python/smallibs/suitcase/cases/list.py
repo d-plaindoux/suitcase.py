@@ -1,6 +1,7 @@
 """ List Cases """
 
 from core import Case, MatchResult
+from smallibs.monads.monad import bind
 from smallibs.monads.options import option
 
 # ----------------------------------------
@@ -23,8 +24,8 @@ class __ConsCase(Case):
     def unapply(self,value):
         if type(value) == list and len(value) > 0:
             iterator = iter(value)
-            return self.head.unapply(iterator.next()).bind(
-                   lambda rhead:self.tail.unapply(list(iterator)).bind(
+            return self.head.unapply(iterator.next()) |bind| (
+                   lambda rhead:self.tail.unapply(list(iterator)) |bind| (
                    lambda rtail:option(MatchResult(value,[]) << rhead << rtail)))
         else:
             return option()

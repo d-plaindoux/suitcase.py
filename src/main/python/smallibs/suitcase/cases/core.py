@@ -1,5 +1,6 @@
 """ Core case """
 
+from smallibs.monads.monad import bind
 from smallibs.monads.options import option
 
 # ----------------------------------------
@@ -83,7 +84,7 @@ class __VarCase(Case):
         return varWith(value)
 
     def unapply(self,value):
-        return self.value.unapply(value).bind(lambda res:option(MatchResult(value,[res.value]) << res))
+        return self.value.unapply(value) |bind| (lambda res:option(MatchResult(value,[res.value]) << res))
 
 # ----------------------------------------
 
@@ -97,7 +98,7 @@ class AtomCase(Case):
         return option(True if self.value == value else None)
 
     def unapply(self,value):
-        return self.compareWith(value).bind(lambda _:option(MatchResult(value,[])))
+        return self.compareWith(value) |bind| (lambda _:option(MatchResult(value,[])))
 
 # ----------------------------------------
 

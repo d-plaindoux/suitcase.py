@@ -3,6 +3,7 @@
 import re
 
 from core import Case, MatchResult
+from smallibs.monads.monad import bind
 from smallibs.monads.options import option
 
 # ----------------------------------------
@@ -15,7 +16,7 @@ class __RegexCase(Case):
         self.value = "^" + value + "$"
 
     def unapply(self,value):
-        return option(re.match(self.value,value)).bind(lambda res:option(MatchResult(res.groups(),[])))
+        return option(re.match(self.value,value)) |bind| (lambda res:option(MatchResult(res.groups(),[])))
 
 # ----------------------------------------
 # Public factories

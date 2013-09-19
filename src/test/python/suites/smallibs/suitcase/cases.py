@@ -4,9 +4,10 @@ from smallibs.monads.options import option
 from smallibs.suitcase.cases.core import Case, var, _
 from smallibs.suitcase.cases.list import Empty,Cons
 from smallibs.suitcase.cases.string import Regex
+from smallibs.monads.monad import bind
 
 def test(a,expected):
-    return a.bind(lambda _:option(True)).join() == expected
+    return (a |bind| (lambda _:option(True))).join() == expected
 
 class TestCase(unittest.TestCase):
     def setUp(self):

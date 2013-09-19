@@ -1,5 +1,7 @@
 """ Monad definition """
 
+from smallibs.utils.infix import Infix
+
 class Monad:
     def __init__(self,value):
         self.value = value;
@@ -9,3 +11,5 @@ class Monad:
 
     def join(self):
         return self.value
+
+bind = Infix(lambda m,f:m.bind(f))
