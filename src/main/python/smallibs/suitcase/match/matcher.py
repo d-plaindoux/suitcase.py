@@ -1,4 +1,4 @@
-""" Matcher class """
+""" Match class """
 
 from types import FunctionType
 from smallibs.suitcase.cases.core import Case
@@ -7,10 +7,10 @@ class MatchingException(Exception):
     def __init__(self):
         pass
 
-class Matcher:
+class Match:
     @staticmethod
     def create():
-        return Matcher()
+        return Match()
 
     #------------------------------
 
@@ -35,7 +35,7 @@ class Matcher:
         return self
 
     def caseOf(self, pattern):
-        return Matcher.__CaseOf(self,pattern)
+        return Match.__CaseOf(self,pattern)
 
     def match(self,term):
         for rule in self.rules:
