@@ -171,3 +171,5 @@ trace     = lambda value: __TraceCase(value)
 
 _         = __AnyCase()
 var       = __VarCase(None)
+
+# Force scope

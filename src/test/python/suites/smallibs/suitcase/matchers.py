@@ -1,9 +1,9 @@
 import unittest
 
-from smallibs.suitcase.cases.core import Case, _, var, reentrant
-from smallibs.suitcase.cases.list import Empty,Cons
-from smallibs.suitcase.cases.string import Regex
-from smallibs.suitcase.match.matcher import Match, MatchingException
+from smallibs.suitcase.cases import _,var,reentrant
+from smallibs.suitcase.cases.list import *
+from smallibs.suitcase.cases.string import *
+from smallibs.suitcase.match import *
 
 class TestCase(unittest.TestCase):
     def setUp(self):
