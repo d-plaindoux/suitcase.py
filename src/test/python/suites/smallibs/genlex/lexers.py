@@ -28,8 +28,8 @@ class TestCase(unittest.TestCase):
 
     def test_should_have_an_int_and_string(self):
         stream = Stream("123'soleil'")
-        genlex = Genlex() |accept| StringDelimMatcher() \
-                          |accept| IntMatcher()
+        genlex = Genlex() <<accept>> StringDelimMatcher() \
+                          <<accept>> IntMatcher()
         
         tokens = genlex.parse(stream)
 
@@ -39,9 +39,9 @@ class TestCase(unittest.TestCase):
                 
     def test_should_have_an_int_and_string_with_spaces(self):
         stream = Stream("123 'soleil'")
-        genlex = Genlex() | skip | Generic((lambda s:s),r'\s+') \
-                          |accept| StringDelimMatcher() \
-                          |accept| IntMatcher()
+        genlex = Genlex() <<skip>>   Generic((lambda s:s),r'\s+') \
+                          <<accept>> StringDelimMatcher() \
+                          <<accept>> IntMatcher()
                     
         tokens = genlex.parse(stream)
 
