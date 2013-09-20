@@ -83,7 +83,7 @@ from smallibs.suitcase.match import *
 
 adder = reentrant(Match.create())
 
-adder <<case>> Empty <<then>> 0 \
+adder <<case>> Empty                   <<then>> 0 \
       <<case>> Cons(var,var.of(adder)) <<then>> (lambda i:i[0] + i[1])
 
 adder.match([1,2,3]) # == 6 (A perfect number)
