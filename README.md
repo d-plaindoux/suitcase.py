@@ -72,8 +72,9 @@ adder.match([1,2,3]) # == 6 (A perfect number)
 
 ### DSL for the pattern matching
 
-Since Python offers hight level capbilities like [infix]() definitions
-the previous example can be expressed naturally.
+Since Python offers hight level capabilities like
+[infix](http://code.activestate.com/recipes/384122-infix-operators/)
+definitions the previous example can be expressed naturally.
 
 ``` python
 from smallibs.suitcase.cases import var,reentrant
