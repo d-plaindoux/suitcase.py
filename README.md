@@ -70,3 +70,22 @@ adder.caseOf(Cons(var,var.of(adder))).then(lambda i:i[0] + i[1])
 adder.match([1,2,3]) # == 6 (A perfect number)
 ``` 
 
+### DSL like
+
+Since Python offers hight level capbilities like [infix]() definitions
+the previous example can be expressed naturally.
+
+``` python
+from smallibs.suitcase.cases import var,reentrant
+from smallibs.suitcase.cases.list import Empty,Cons
+from smallibs.suitcase.match import *
+
+adder = reentrant(Match.create())
+
+adder <<case>> Empty <<then>> 0 \
+      <<case>> Cons(var,var.of(adder)) <<then>> (lambda i:i[0] + i[1])
+
+adder.match([1,2,3]) # == 6 (A perfect number)
+``` 
+
+

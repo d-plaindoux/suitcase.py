@@ -2,6 +2,7 @@
 
 from types import FunctionType
 from smallibs.suitcase.cases.core import Case
+from smallibs.utils.infix import Infix
 
 class MatchingException(Exception):
     def __init__(self):
@@ -45,3 +46,7 @@ class Match:
                 return rule[1](variables)
 
         raise MatchingException()
+
+case = Infix(lambda m,p:m.caseOf(p))
+then = Infix(lambda c,r:c.then(r))
+
