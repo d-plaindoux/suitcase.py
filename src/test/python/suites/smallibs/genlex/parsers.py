@@ -17,9 +17,9 @@ class TestCase(unittest.TestCase):
         stream = Stream("123 soleil")
         matcher = Match.create()
         
-        matcher <<case>> Seq(Int,matcher)    <<then>> (lambda a:a) \
-                <<case>> Seq(String,matcher) <<then>> (lambda b:b) \
-                <<case>> _                   <<then>> (lambda a:a) 
+        matcher <<case>> (int,matcher) <<then>> True \
+                <<case>> (str,matcher) <<then>> True \
+                <<case>> _             <<then>> True 
         
         assert IntMatcher()(stream).join() == 123
                 
