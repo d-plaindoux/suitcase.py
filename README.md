@@ -53,7 +53,7 @@ adder.caseOf(Cons(var,var)).then(lambda i:i[0] + adder.match(i[1]))
 adder.match([1,2,3]) # == 6 (A perfect number)
 ``` 
 
-#### Rentrant recursive structural induction
+#### Reentrant recursive structural induction
 
 Computation based on structural induction can also been provided using
 `reentrant` capability for example.
